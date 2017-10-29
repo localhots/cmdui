@@ -1,0 +1,17 @@
+log_dir = "/var/log/commands"
+
+[commands]
+base_path = "/usr/local/bin/runner"
+config_command = "/usr/local/bin/runner_commands --export=json"
+
+[database]
+driver = "mysql"
+spec = "root:@(localhost:3306)/commands?charset=utf8mb4&parseTime=true"
+
+[server]
+host = "http://127.0.0.1"
+port = 9090
+
+[github]
+client_id = "secret"
+client_secret = "secret"

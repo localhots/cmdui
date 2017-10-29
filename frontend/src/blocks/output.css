@@ -1,0 +1,58 @@
+.output {
+    overflow: auto;
+    margin: 0 0 20px 0;
+    background-color: #fafafa;
+    border: #f4f4f4 1px solid;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: monospace;
+    visibility: hidden;
+}
+    .output.visible {
+        visibility: visible;
+    }
+
+.job-details.full {
+    display: grid;
+    grid-template-rows: auto;
+    margin: 10px 0 10px 0;
+
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: #eaeaea 1px solid;
+    border-radius: 4px;
+}
+    .job-details.full .item > * {
+        line-height: 24px;
+    }
+    .job-details.full .item .name {
+        grid-column: 1;
+        display: inline-block;
+        font-weight: 600;
+        margin: 0 5px 0 0;
+    }
+        .job-details.full .item .name:after {
+            content: ':';
+        }
+    .job-details.full .item .val {
+        grid-column: 2;
+        display: inline-block;
+    }
+    .job-details.full .item.command {
+        font-family: monospace;
+    }
+        .job-details.full .item.command .command {
+            font-weight: 600;
+            margin: 0 10px 0 0;
+        }
+        .job-details.full .item.command .args {
+            margin: 0 10px 0 0;
+        }
+    .job-details.full .item.state .val.finished {
+        color: #3e0;
+        font-weight: 600;
+    }
+    .job-details.full .item.state .val.failed {
+        color: #e30;
+        font-weight: 600;
+    }

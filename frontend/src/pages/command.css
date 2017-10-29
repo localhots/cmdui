@@ -1,0 +1,86 @@
+form {
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+
+form > .command {
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+    .command .name {
+        font-size: 24px;
+        line-height: 36px;
+    }
+    .command .descr {
+        color: #666;
+    }
+.fields li {
+    margin: 0 0 10px;
+}
+    .fields label {
+        display: inline-block;
+        margin: 0 5px 0 0;
+
+        line-height: 18px;
+        font-size: 14px;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .fields .descr {
+        font-size: 12px;
+        line-height: 18px;
+        color: #666;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+input {
+    display: block;
+    width: calc(100% - 10px);
+    margin: 0;
+    padding: 0 5px;
+    line-height: 30px;
+    font-size: 16px;
+    border: #ddd 1px solid;
+    border-radius: 4px;
+}
+input[type=checkbox] {
+    display: inline-block;
+    width: auto;
+    margin: 0 5px 0 0;
+}
+input[type=submit] {
+    width: auto;
+    padding: 5px 25px;
+    background-color: #891826;
+    color: #fff;
+    cursor: pointer;
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+a.history {
+    line-height: 42px;
+}
+
+.select-command {
+    display: block;
+    width: calc(100% - 20px);
+    line-height: 60px;
+    background-color: #eee;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.error {
+    overflow: auto;
+    margin: 0 0 20px 0;
+    background-color: #f55;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+}

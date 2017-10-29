@@ -1,0 +1,19 @@
+.login-page {
+    width: 100%;
+    text-align: center;
+}
+    .login-page .button {
+        display: block;
+        margin-top: 100px;
+        text-decoration: none;
+    }
+    .login-page img {
+        width: 150px;
+        height: 150px;
+    }
+    .login-page div {
+        line-height: 30px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #222;
+    }

@@ -1,0 +1,21 @@
+body {
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #222;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 280px 100%;
+    max-width: 1400px;
+}
+
+main {
+    max-width: 1400px;
+    width: calc(100% - 300px);
+}
+
+a {
+    color: #a11122;
+}

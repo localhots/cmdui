@@ -1,0 +1,14 @@
+.command-details {
+    font-size: 24px;
+    line-height: 50px;
+    margin: 0 0 10px 0;
+}
+.command-details span {
+    display: inline-block;
+    margin-right: 5px;
+}
+.command-details .cmd-name {
+    display: inline-block;
+    font-weight: 400;
+    font-family: monospace;
+}

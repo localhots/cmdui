@@ -1,0 +1,45 @@
+header {
+    width: 100%;
+    background-color: #891826;
+    color: #fff;
+}
+    .header-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        margin: 0 0 20px 0;
+        max-width: 1400px;
+    }
+    header .go-api {
+        grid-column: 1;
+        margin: 0 0 2px 20px;
+
+        font-weight: 600;
+        white-space: nowrap;
+        font-size: 24px;
+        line-height: 38px;
+    }
+        header .go-api span {
+            font-weight: 200;
+        }
+            header .go-api span:before {
+                content: ' | ';
+            }
+    header .auth {
+        display: grid;
+        grid-column: 2;
+        grid-template-columns: auto 55px;
+    }
+        header .auth .name {
+            grid-column: 1;
+
+            text-align: right;
+            line-height: 40px;
+        }
+        header .auth img {
+            grid-column: 2;
+            margin: 5px 20px 5px 5px;
+
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+        }
