@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strings"
+	"net/url"
 
 	"github.com/localhots/cmdui/backend/api/auth"
 	"github.com/localhots/cmdui/backend/commands"
@@ -61,18 +61,13 @@ func commandFromRequest(r *http.Request) (commands.Command, error) {
 		return cmd, fmt.Errorf("Unknown command: %q", r.PostForm.Get("command"))
 	}
 
-	for key, val := range r.PostForm {
-		if key == "args" {
-			cmd.Args = val[0]
-		} else if strings.HasPrefix(key, "flags[") {
-			name := key[6 : len(key)-1]
-			for i, f := range cmd.Flags {
-				if f.Name == name {
-					cmd.Flags[i].Value = val[0]
-				}
-			}
-		}
-	}
+	return buildCommand(cmd, r.PostForm), nil
+}
 
-	return cmd, nil
+func buildCommand(cmd commands.Command, p url.Values) commands.Command {
+	cmd.Args = p.Get("args")
+	for i, f := range cmd.Flags {
+		cmd.Flags[i].Value = p.Get(fmt.Sprintf("flags[%s]", f.Name))
+	}
+	return cmd
 }
