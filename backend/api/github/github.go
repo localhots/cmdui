@@ -29,7 +29,7 @@ const (
 func RedirectToLogin(w http.ResponseWriter, r *http.Request) {
 	urlStr := authorizeURL + "?" + url.Values{
 		"client_id": {config.Get().Github.ClientID},
-		"scope":     {"user"},
+		"scope":     {"read:user"},
 	}.Encode()
 	http.Redirect(w, r, urlStr, http.StatusTemporaryRedirect)
 }
