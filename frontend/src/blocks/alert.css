@@ -1,0 +1,9 @@
+.alert {
+    overflow: auto;
+    margin: 0 0 20px 0;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.alert.error { background-color: #f55; }

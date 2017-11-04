@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import Nav from '../blocks/nav.js'
 import Output from '../blocks/output.js'
+import Alert from '../blocks/alert.js'
 import { api, httpPOST } from '../http.js'
 import './command.css'
 
@@ -43,7 +44,7 @@ export default class Command extends Component {
                     query={this.props.query} onQueryChange={this.props.onQueryChange} />
                 <main>
                     {this.renderForm()}
-                    {this.renderError()}
+                    <Alert type="error" message={this.state.error} />
                     <Output jobID={this.state.jobID} />
                 </main>
             </div>
@@ -108,15 +109,6 @@ export default class Command extends Component {
                 </li>
             )
         }
-    }
-
-    renderError() {
-        if (this.state.error === null) {
-            return null
-        }
-        return (
-            <div className="error">{this.state.error}</div>
-        )
     }
 
     submitHandler(event) {

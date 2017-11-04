@@ -75,12 +75,3 @@ a.history {
     text-align: center;
     border-radius: 4px;
 }
-
-.error {
-    overflow: auto;
-    margin: 0 0 20px 0;
-    background-color: #f55;
-    color: #fff;
-    border-radius: 4px;
-    padding: 10px;
-}
