@@ -1,75 +1,75 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-import Timestamp from './timestamp.js';
-import { api, httpGET, httpStreamGET } from '../http.js';
-import './output.css';
+import Timestamp from './timestamp.js'
+import { api, httpGET, httpStreamGET } from '../http.js'
+import './output.css'
 
 export default class Output extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             job: null,
             xhr: null
-        };
+        }
     }
 
     componentDidMount() {
-        let jobID = this.props.jobID;
+        let jobID = this.props.jobID
         if (jobID !== null) {
-            this.loadCommandLog(jobID);
-            this.loadJobDetails(jobID);
+            this.loadCommandLog(jobID)
+            this.loadJobDetails(jobID)
         }
     }
 
     componentWillUnmount() {
         if (this.state.xhr !== null) {
-            this.state.xhr.abort();
+            this.state.xhr.abort()
         }
     }
 
     loadJobDetails(id) {
         if (id === null) {
-            return;
+            return
         }
 
         httpGET(api("/jobs/" + id),
             (status, body) => {
-                this.setState({job: JSON.parse(body)});
+                this.setState({job: JSON.parse(body)})
             },
             (error) => {
-                console.log("Failed to load job details:", error);
+                console.log("Failed to load job details:", error)
             }
-        );
+        )
     }
 
     loadCommandLog(id) {
         if (id === null || this.state.xhr !== null) {
-            return;
+            return
         }
 
         let xhr = httpStreamGET(api("/jobs/" + id + "/log"),
             (chunk) => { // Progress
-                let target = this.refs["output"];
-                target.innerHTML += chunk.replace(/\n/g, "<br/>");
-                this.autoScroll();
+                let target = this.refs["output"]
+                target.innerHTML += chunk.replace(/\n/g, "<br/>")
+                this.autoScroll()
             },
             (status) => { // Complete
                 // Request cancelled
                 if (status === 0) {
-                    return;
+                    return
                 }
 
                 // Reload job details
-                this.setState({xhr: null});
-                this.loadJobDetails(id);
+                this.setState({xhr: null})
+                this.loadJobDetails(id)
             },
             (error) => {
-                let target = this.refs["output"];
-                target.innerHTML = "Failed to fetch command log: "+ error;
+                let target = this.refs["output"]
+                target.innerHTML = "Failed to fetch command log: "+ error
             }
-        );
-        this.setState({xhr: xhr});
+        )
+        this.setState({xhr: xhr})
     }
 
     autoScroll() {
@@ -77,32 +77,28 @@ export default class Output extends Component {
     }
 
     render() {
-        var outputClass = "output";
-        if (this.state.job) {
-            outputClass += " visible";
-        }
-
+        let className = this.state.job ? "output visible" : "output"
         return (
             <div>
                 {this.renderJobDetails()}
-                <div ref="output" className={outputClass}></div>
+                <div ref="output" className={className}></div>
             </div>
-        );
+        )
     }
 
     renderJobDetails() {
-        let details = this.state.job;
+        let details = this.state.job
         if (!details) {
-            return (<div></div>);
+            return null
         }
 
-        // let shortID = details.id.substring(0, 8);
-        var state = details.state;
-        state = state.charAt(0).toUpperCase() + state.substr(1);
+        // let shortID = details.id.substring(0, 8)
+        var state = details.state
+        state = state.charAt(0).toUpperCase() + state.substr(1)
 
-        var args;
+        var args
         if (details.args !== "") {
-            args = <span className="args">{details.args}</span>;
+            args = <span className="args">{details.args}</span>
         }
         return (
             <div className="job-details full">
@@ -126,34 +122,34 @@ export default class Output extends Component {
                 {this.renderStarted()}
                 {this.renderFinished()}
             </div>
-        );
+        )
     }
 
     renderStarted() {
-        let details = this.state.job;
+        let details = this.state.job
         return (
             <div className="item started_at">
                 <div className="name">Started</div>
                 <div className="val"><Timestamp date={details.started_at} relative={details.finished_at === null} /></div>
             </div>
-        );
+        )
     }
 
     renderFinished() {
-        let details = this.state.job;
-        if (details.finished_at !== null) {
-            return [
-                <div className="item finished_at" key="finished_at">
-                    <div className="name">Finished</div>
-                    <div className="val"><Timestamp date={details.finished_at} /></div>
-                </div>,
-                <div className="item took" key="took">
-                    <div className="name">Took</div>
-                    <div className="val"><Timestamp from={details.started_at} until={details.finished_at} /></div>
-                </div>
-            ];
-        } else {
-            return null;
+        let details = this.state.job
+        if (details.finished_at === null) {
+            return null
         }
+
+        return [
+            <div className="item finished_at" key="finished_at">
+                <div className="name">Finished</div>
+                <div className="val"><Timestamp date={details.finished_at} /></div>
+            </div>,
+            <div className="item took" key="took">
+                <div className="name">Took</div>
+                <div className="val"><Timestamp from={details.started_at} until={details.finished_at} /></div>
+            </div>
+        ]
     }
 }

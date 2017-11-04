@@ -1,21 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import './header.css'
 
-import './header.css';
-
-class Header extends Component {
+export default class Header extends Component {
     render() {
+        let user = this.props.user
         return (
             <header>
                 <div className="header-container">
                     <div className="go-api">go-api<span>commands</span></div>
                     <div className="auth">
-                        <div className="name">{this.props.user.name}</div>
-                        <img src={this.props.user.picture} alt="" />
+                        <div className="name">{user.name}</div>
+                        <img src={user.picture} alt={"Picture of "+ user.name} />
                     </div>
                 </div>
             </header>
-        );
+        )
     }
 }
-
-export default Header;

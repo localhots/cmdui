@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-import Timestamp from './timestamp.js';
-import './job_list.css';
+import Timestamp from './timestamp.js'
+import './job_list.css'
 
 export default class JobList extends Component {
     render() {
         if (this.props.jobs === undefined) {
-            return null;
+            return null
         }
 
         return (
@@ -26,7 +26,7 @@ export default class JobList extends Component {
     }
 
     renderJob(job) {
-        let shortID = job.id.substring(0, 8);
+        let shortID = job.id.substring(0, 8)
         return (
             <div key={job.id} className={"job-details short"}>
                 <div className={"dot "+ job.state}></div>
@@ -36,7 +36,7 @@ export default class JobList extends Component {
                 <div className="started"><Timestamp date={job.started_at} /></div>
                 <div className="took"><Timestamp from={job.started_at} until={job.finished_at} /></div>
             </div>
-        );
+        )
     }
 }
 
