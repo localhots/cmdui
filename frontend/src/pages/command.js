@@ -136,7 +136,7 @@ export default class Command extends Component {
     }
 
     input(flag) {
-        let flagName = (name) => { return "flags[" + name + "]";  }
+        let flagName = (name) => "flags[" + name + "]"
         if (flag.type === "bool") {
             return (
                 <li key={flag.name}>
@@ -160,8 +160,9 @@ export default class Command extends Component {
                 <li key={flag.name}>
                     <label htmlFor={"flags-"+flag.name}>{flag.name}</label>
                     <span className="descr">{flag.description}</span>
-                    <input type={inputType} name={flagName(flag.name)} id={"flags-"+flag.name}
-                        defaultValue={flag.default} onChange={this.changeHandler.bind(this)} />
+                    <input type={inputType} name={flagName(flag.name)} id={"flag-"+flag.name}
+                        defaultValue={flag.default}
+                        onChange={this.changeHandler.bind(this)} />
                 </li>
             )
         }
