@@ -1,141 +1,83 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
-import Nav from '../blocks/nav.js';
-import Output from '../blocks/output.js';
-import { api, httpPOST } from '../http.js';
-import './command.css';
+import Nav from '../blocks/nav.js'
+import Output from '../blocks/output.js'
+import { api, httpPOST } from '../http.js'
+import './command.css'
 
 export default class Command extends Component {
     constructor(props) {
-        super(props);
-
+        super(props)
         this.state = {
             form: this.defaultForm(props.commands[props.cmd]),
             jobID: null,
             error: null,
-        };
+        }
     }
 
     componentWillReceiveProps(props) {
-        this.setState({form: this.defaultForm(props.commands[props.cmd])});
+        let form = this.defaultForm(props.commands[props.cmd])
+        this.setState({form: form})
     }
 
     defaultForm(cmd) {
         if (!cmd || Object.keys(cmd).length === 0) {
-            return {};
+            return {}
         }
 
-        var form = {
+        return {
             command: cmd.name,
             args: "",
-            flags: {}
+            flags: cmd.flags.reduce((list = {}, flag) => {
+                list[flag.name] = flag.default
+                return list
+            })
         }
-        cmd.flags.forEach((flag) => {
-            form.flags[flag.name] = flag.default;
-        });
-        return form;
     }
 
     render() {
-        let cmd = this.props.commands[this.props.cmd];
-        if (!cmd) {
-            return null;
-        }
-
         return (
             <div className="container">
                 <Nav commands={this.props.commands} active={this.props.cmd}
                     query={this.props.query} onQueryChange={this.props.onQueryChange} />
                 <main>
-                    <form method="post" action="/api/exec" onSubmit={this.submitHandler.bind(this)} ref="form">
-                        <div className="command">
-                            <div className="name">{cmd.name}</div>
-                            <div className="descr">{cmd.description}</div>
-                            <input type="hidden" name="command" defaultValue={cmd.name} />
-                        </div>
-                        <ul className="fields">
-                            <li>
-                                <div className="descr">Command arguments</div>
-                                <input type="text" name="args" placeholder={cmd.args_placeholder}
-                                    onChange={this.changeHandler.bind(this)} />
-                            </li>
-                            {cmd.flags.map((flag) => { return this.input(flag); })}
-                        </ul>
-                        <input type="submit" value="Execute" id="submit-button"/>
-                        <Link to={"/cmd/"+ cmd.name +"/jobs"} className="history">History</Link>
-                    </form>
+                    {this.renderForm()}
                     {this.renderError()}
-                    <Output cmd={cmd} jobID={this.state.jobID} key={this.state.jobID} />
+                    <Output jobID={this.state.jobID} />
                 </main>
             </div>
-        );
+        )
     }
 
-    renderError() {
-        if (this.state.error === null) {
-            return null;
+    renderForm() {
+        let cmd = this.props.commands[this.props.cmd]
+        if (!cmd) {
+            return null
         }
+
         return (
-            <div className="error">{this.state.error}</div>
-        );
+            <form method="post" action="/api/exec" onSubmit={this.submitHandler.bind(this)} ref="form">
+                <div className="command">
+                    <div className="name">{cmd.name}</div>
+                    <div className="descr">{cmd.description}</div>
+                    <input type="hidden" name="command" defaultValue={cmd.name} />
+                </div>
+                <ul className="fields">
+                    <li>
+                        <div className="descr">Command arguments</div>
+                        <input type="text" name="args" placeholder={cmd.args_placeholder}
+                            onChange={this.changeHandler.bind(this)} />
+                    </li>
+                    {cmd.flags.map(this.renderFlag.bind(this))}
+                </ul>
+                <input type="submit" value="Execute" id="submit-button"/>
+                <Link to={"/cmd/"+ cmd.name +"/jobs"} className="history">History</Link>
+            </form>
+        )
     }
 
-    submitHandler(event) {
-        event.preventDefault();
-
-        let f = this.state.form;
-        var args = [];
-        args.push(["command", f.command]);
-        args.push(["args", f.args]);
-        for (let name of Object.keys(f.flags)) {
-            args.push(["flags[" + name + "]", f.flags[name]]);
-        }
-        let formQuery = args.map((pair) => {
-            return pair[0] + "=" + encodeURIComponent(pair[1]);
-        }).join("&");
-
-        httpPOST(api("/exec"), formQuery,
-            (response) => {
-                let details = JSON.parse(response);
-                this.setState({jobID: details.id, error: null});
-            },
-            (error) => {
-                this.setState({jobID: null, error: error});
-            },
-        );
-    }
-
-    changeHandler(event) {
-        if (event.target.id.indexOf("flag-") === 0) {
-            var val = event.target.value;
-            if (event.target.type === "checkbox") {
-                val = JSON.stringify(event.target.checked);
-            }
-
-            var flags = this.state.form.flags;
-            let name = event.target.id.substring(5);
-            flags[name] = val;
-
-            this.setState({
-                form: {
-                    command: this.state.form.command,
-                    args: this.state.form.args,
-                    flags: flags
-                }
-            });
-        } else if (event.target.name === "args") {
-            this.setState({
-                form: {
-                    command: this.state.form.command,
-                    args: event.target.value,
-                    flags: this.state.form.flags
-                }
-            });
-        }
-    }
-
-    input(flag) {
+    renderFlag(flag) {
         let flagName = (name) => "flags[" + name + "]"
         if (flag.type === "bool") {
             return (
@@ -148,17 +90,17 @@ export default class Command extends Component {
                 </li>
             )
         } else {
-            var inputType = "string";
+            var inputType = "string"
             let numericTypes = [
                 "int", "int8", "int16", "int32", "int64",
                 "uint", "uint8", "uint16", "uint32", "uint64"
-            ];
+            ]
             if (numericTypes.includes(flag.type)) {
-                inputType = "number";
+                inputType = "number"
             }
             return (
                 <li key={flag.name}>
-                    <label htmlFor={"flags-"+flag.name}>{flag.name}</label>
+                    <label htmlFor={"flag-"+flag.name}>{flag.name}</label>
                     <span className="descr">{flag.description}</span>
                     <input type={inputType} name={flagName(flag.name)} id={"flag-"+flag.name}
                         defaultValue={flag.default}
@@ -167,4 +109,63 @@ export default class Command extends Component {
             )
         }
     }
+
+    renderError() {
+        if (this.state.error === null) {
+            return null
+        }
+        return (
+            <div className="error">{this.state.error}</div>
+        )
+    }
+
+    submitHandler(event) {
+        event.preventDefault()
+        httpPOST(api("/exec"), formQuery(this.state.form),
+            (response) => {
+                let details = JSON.parse(response)
+                this.setState({jobID: details.id, error: null})
+            },
+            (error) => {
+                this.setState({jobID: null, error: error})
+            },
+        )
+    }
+
+    changeHandler(event) {
+        let field = event.target
+        let form = this.state.form
+        if (field.id.indexOf("flag-") === 0) {
+            var val = field.value
+            if (field.type === "checkbox") {
+                val = JSON.stringify(field.checked)
+            }
+
+            let name = field.id.substring(5)
+            form.flags[name] = val
+
+            this.setState({
+                form: {
+                    command: form.command,
+                    args: form.args,
+                    flags: form.flags
+                }
+            })
+        } else if (field.name === "args") {
+            this.setState({
+                form: {
+                    command: form.command,
+                    args: field.value,
+                    flags: form.flags
+                }
+            })
+        }
+    }
+}
+
+function formQuery(form) {
+    var args = Object.keys(form.flags).map((name) => ["flags[" + name + "]", form.flags[name]])
+    args.push(["command", form.command])
+    args.push(["args", form.args])
+    return args.map((pair) => pair[0] + "=" + encodeURIComponent(pair[1]))
 }
