@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './loading.css';
+import React, { Component } from 'react'
+import './loading.css'
 
 export default class Loading extends Component {
     render() {
@@ -7,6 +7,6 @@ export default class Loading extends Component {
             <div className="loading-page">
                 Loading...
             </div>
-        );
+        )
     }
 }
