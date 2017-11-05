@@ -30,10 +30,10 @@ export default class Command extends Component {
         return {
             command: cmd.name,
             args: "",
-            flags: cmd.flags.reduce((list = {}, flag) => {
+            flags: cmd.flags.reduce((list, flag) => {
                 list[flag.name] = flag.default
                 return list
-            })
+            }, {})
         }
     }
 
