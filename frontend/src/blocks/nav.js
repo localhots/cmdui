@@ -15,7 +15,7 @@ export default class Nav extends Component {
                 <input className="search" type="search" placeholder="Search for commands"
                     value={this.props.query} onChange={this.props.onQueryChange} results="0" />
                 <ul>
-                    {Object.keys(this.props.commands).map(this.renderItem)}
+                    {Object.keys(this.props.commands).map(item => this.renderItem(item))}
                 </ul>
             </nav>
         )
