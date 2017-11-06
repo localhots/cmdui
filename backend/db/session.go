@@ -42,13 +42,9 @@ func FindSession(id string) (*Session, error) {
 
 func (s Session) Create() error {
 	_, err := db.NamedExec(`
-        INSERT INTO sessions
-        SET
-            id = :id,
-            user_id = :user_id,
-            created_at = :created_at,
-            expires_at = :expires_at
-    `, s)
+        INSERT INTO sessions (id, user_id, created_at, expires_at)
+        VALUES (:id, :user_id, :created_at, :expires_at)
+	 `, s)
 	if err != nil {
 		return errors.Annotate(err, "Failed to create a session")
 	}

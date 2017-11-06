@@ -1,12 +1,16 @@
-log_dir = "/var/log/commands"
+log_dir = "data/logs"
 
 [commands]
 base_path = "/usr/local/bin/runner"
 config_command = "/usr/local/bin/runner_commands --export=json"
 
 [database]
-driver = "mysql"
-spec = "root:@(localhost:3306)/commands?charset=utf8mb4&parseTime=true"
+driver = "sqlite3"
+spec = "data/cmdui.db"
+
+# MySQL example
+# driver = "mysql"
+# spec = "root:@(localhost:3306)/commands?charset=utf8mb4&parseTime=true"
 
 [server]
 host = "http://127.0.0.1"

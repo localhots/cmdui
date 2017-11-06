@@ -71,13 +71,8 @@ func findUser(query string, args ...interface{}) (*User, error) {
 
 func (u User) Create() error {
 	_, err := db.NamedExec(`
-        INSERT INTO users
-        SET
-            id = :id,
-            github_id = :github_id,
-            github_login = :github_login,
-            github_name = :github_name,
-            github_picture = :github_picture
+        INSERT INTO users (id, github_id, github_login, github_name, github_picture)
+        VALUES (:id, :github_id, :github_login, :github_name, :github_picture)
     `, u)
 	if err != nil {
 		return errors.Annotate(err, "Failed to create a user")

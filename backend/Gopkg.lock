@@ -44,6 +44,12 @@
   version = "v1.1"
 
 [[projects]]
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  revision = "5160b48509cf5c877bc22c11c373f8c7738cdb38"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/satori/go.uuid"
   packages = ["."]
   revision = "879c5887cd475cd7864858769793b2ceb0d44feb"
@@ -57,6 +63,12 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "01c190206fbdffa42f334f4b2bf2220f50e64920"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
   revision = "b98136db334ff9cb24f28a68e3be3cb6608f7630"
@@ -64,6 +76,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6c201fcf68612a8ad33e6e620125ca3a88e8e4c34d7acc2b5ed0f452c3457a3f"
+  inputs-digest = "4db9692ffa1d302e9cb342da138f0606a659403be6d1131f8689b874610a1eff"
   solver-name = "gps-cdcl"
   solver-version = 1

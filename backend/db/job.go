@@ -127,16 +127,9 @@ func (r *Job) Create() error {
 	r.State = string(JobStateCreated)
 
 	_, err := db.NamedExec(`
-        INSERT INTO jobs
-        SET
-            id = :id,
-            command = :command,
-            args = :args,
-            flags = :flags,
-            user_id = :user_id,
-            state = :state,
-            created_at = :created_at
-    `, r)
+        INSERT INTO jobs (id, command, args, flags, user_id, state, created_at)
+        VALUES (:id, :command, :args, :flags, :user_id, :state, :created_at)
+	`, r)
 	if err != nil {
 		return errors.Annotate(err, "Failed to create a job")
 	}

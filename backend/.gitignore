@@ -1,4 +1,5 @@
 vendor
 build
+data
 api/assets/bindata_assetfs.go
 config.toml
