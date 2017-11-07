@@ -29,6 +29,7 @@ export default class Output extends Component {
 
     loadJob(id) {
         if (id) {
+            this.refs["output"].innerHTML = ""
             this.loadJobDetails(id)
             this.loadCommandLog(id)
         }
