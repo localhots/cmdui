@@ -14,8 +14,10 @@ build_docker:
 	cd backend && docker build . -t cmdui:build
 	cd backend && docker run -i -v ${PWD}/backend/build:/build cmdui:build \
 		go build -tags=binassets -o /build/cmdui_linux main.go
+	gzip -kf backend/build/cmdui_linux
 	@echo Build complete!
-	@echo Binary is located at backend/build/cmdui_linux
+	@echo Binary: backend/build/cmdui_linux
+	@echo GZIP:   backend/build/cmdui_linux.gz
 
 assets:
 	cd frontend && npm run build
