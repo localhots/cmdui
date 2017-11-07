@@ -12,6 +12,11 @@ build:
 		frontend/build/...
 	go build -tags=binassets -o backend/build/cmdui backend/main.go
 
+build_linux:
+	cd backend && docker build . -t cmdui:build
+	cd backend && docker run -i -v ${PWD}/backend/build:/artefacts cmdui:build \
+		go build -o /artefacts/cmdui_linux main.go
+
 create_db:
 	sqlite3 backend/data/cmdui.db < backend/schema_sqlite.sql
 
