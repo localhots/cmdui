@@ -8,31 +8,33 @@ import './output.css'
 export default class Output extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            job: null,
-            xhr: null
+        this.state = {job: null, xhr: null}
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.jobID && props.jobID !== this.props.jobID) {
+            this.loadJob(props.jobID)
         }
     }
 
     componentDidMount() {
-        let jobID = this.props.jobID
-        if (jobID !== null) {
-            this.loadCommandLog(jobID)
-            this.loadJobDetails(jobID)
-        }
+        this.loadJob(this.props.jobID)
     }
 
     componentWillUnmount() {
-        if (this.state.xhr !== null) {
+        if (this.state.xhr) {
             this.state.xhr.abort()
         }
     }
 
-    loadJobDetails(id) {
-        if (id === null) {
-            return
+    loadJob(id) {
+        if (id) {
+            this.loadJobDetails(id)
+            this.loadCommandLog(id)
         }
+    }
 
+    loadJobDetails(id) {
         httpGET(api("/jobs/" + id),
             (status, body) => {
                 this.setState({job: JSON.parse(body)})
@@ -44,8 +46,8 @@ export default class Output extends Component {
     }
 
     loadCommandLog(id) {
-        if (id === null || this.state.xhr !== null) {
-            return
+        if (this.state.xhr) {
+            this.state.xhr.abort()
         }
 
         let xhr = httpStreamGET(api("/jobs/" + id + "/log"),

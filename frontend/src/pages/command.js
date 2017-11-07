@@ -157,7 +157,7 @@ export default class Command extends Component {
 
 function formQuery(form) {
     var args = Object.keys(form.flags).map((name) => ["flags[" + name + "]", form.flags[name]])
-    args.push(["command", form.command])
-    args.push(["args", form.args])
-    return args.map((pair) => pair[0] + "=" + encodeURIComponent(pair[1]))
+    args.unshift(["command", form.command], ["args", form.args])
+    let param = (pair) => pair[0] + "=" + encodeURIComponent(pair[1])
+    return args.map(param).join("&")
 }
