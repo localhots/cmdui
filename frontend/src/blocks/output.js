@@ -5,10 +5,13 @@ import Timestamp from './timestamp.js'
 import { api, httpGET, httpStreamGET } from '../http.js'
 import './output.css'
 
+let Convert = require('ansi-to-html')
+let converter = new Convert()
+
 export default class Output extends Component {
     constructor(props) {
         super(props)
-        this.state = {job: null, xhr: null}
+        this.state = { job: null, xhr: null }
     }
 
     componentWillReceiveProps(props) {
@@ -38,7 +41,7 @@ export default class Output extends Component {
     loadJobDetails(id) {
         httpGET(api("/jobs/" + id),
             (status, body) => {
-                this.setState({job: JSON.parse(body)})
+                this.setState({ job: JSON.parse(body) })
             },
             (error) => {
                 console.log("Failed to load job details:", error)
@@ -54,6 +57,7 @@ export default class Output extends Component {
         let xhr = httpStreamGET(api("/jobs/" + id + "/log"),
             (chunk) => { // Progress
                 let target = this.refs["output"]
+                chunk = converter.toHtml(chunk)
                 target.innerHTML += chunk.replace(/\n/g, "<br/>")
                 this.autoScroll()
             },
@@ -64,15 +68,15 @@ export default class Output extends Component {
                 }
 
                 // Reload job details
-                this.setState({xhr: null})
+                this.setState({ xhr: null })
                 this.loadJobDetails(id)
             },
             (error) => {
                 let target = this.refs["output"]
-                target.innerHTML = "Failed to fetch command log: "+ error
+                target.innerHTML = "Failed to fetch command log: " + error
             }
         )
-        this.setState({xhr: xhr})
+        this.setState({ xhr: xhr })
     }
 
     autoScroll() {
@@ -106,21 +110,21 @@ export default class Output extends Component {
         return (
             <div className="job-details full">
                 <div className="item command">
-                    <span className="command"><Link to={"/cmd/"+ details.command + "/jobs"}>{details.command}</Link></span>
+                    <span className="command"><Link to={"/cmd/" + details.command + "/jobs"}>{details.command}</Link></span>
                     {args}
                     <span className="flags">{details.flags}</span>
                 </div>
                 <div className="item id">
                     <div className="name">ID</div>
-                    <div className="val"><Link to={"/cmd/"+ details.command + "/jobs/"+ details.id}>{details.id}</Link></div>
+                    <div className="val"><Link to={"/cmd/" + details.command + "/jobs/" + details.id}>{details.id}</Link></div>
                 </div>
                 <div className="item state">
                     <div className="name">Status</div>
-                    <div className={"val "+details.state}>{state}</div>
+                    <div className={"val " + details.state}>{state}</div>
                 </div>
                 <div className="item user">
                     <div className="name">User</div>
-                    <div className="val"><Link to={"/users/"+ details.user.id +"/jobs"}>{details.user.name}</Link></div>
+                    <div className="val"><Link to={"/users/" + details.user.id + "/jobs"}>{details.user.name}</Link></div>
                 </div>
                 {this.renderStarted()}
                 {this.renderFinished()}
