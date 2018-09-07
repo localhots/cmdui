@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -42,7 +43,7 @@ var router = httprouter.New()
 func openEndpoint(h handle) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 		ctx := contextWithParams(r.Context(), params)
-		h(ctx, w, r)
+		logRequest(ctx, w, r, h)
 	}
 }
 
@@ -57,6 +58,18 @@ func protectedEndpoint(h handle) httprouter.Handle {
 		ctx = contextWithParams(ctx, params)
 		h(ctx, w, r)
 	}
+}
+
+func logRequest(ctx context.Context, w http.ResponseWriter, r *http.Request, h handle) {
+	startedAt := time.Now()
+	log.Logger().Infof("--> %s %s", r.Method, r.URL.Path)
+	sw := statusRecorder{ResponseWriter: w}
+	h(ctx, sw, r)
+	took := time.Since(startedAt).Truncate(100 * time.Microsecond)
+	if sw.status == 0 {
+		sw.status = http.StatusOK
+	}
+	log.Logger().Infof("<-- %d %s (%s)", sw.status, http.StatusText(sw.status), took)
 }
 
 //
@@ -151,4 +164,14 @@ func (w unbufferedWriter) Write(p []byte) (int, error) {
 		f.Flush()
 	}
 	return n, err
+}
+
+type statusRecorder struct {
+	status int
+	http.ResponseWriter
+}
+
+func (w statusRecorder) WriteHeader(statusCode int) {
+	w.status = statusCode
+	w.ResponseWriter.WriteHeader(statusCode)
 }
