@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"strings"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // Import MySQL driver
 	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3" // Import SQLite driver
 	uuid "github.com/satori/go.uuid"
 
 	"github.com/localhots/cmdui/backend/config"
